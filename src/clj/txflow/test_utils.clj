@@ -5,7 +5,7 @@
 (defn track-service-map
   "Watches each call to each injected service and reports on the number of
   times it is called."
-  [transition-tree & body]
+  [txflow-graph & body]
   (let [listener
         (atom (reduce (fn [service-map
                           [service-name _ _]]
@@ -31,8 +31,8 @@
                               (catch Exception e (prn e))))))
                  {}
                  body)}]
-    (if-not (s/valid? transition-tree (:service-map mock-service))
-      (throw (ex-info "Invalid txflow implementation" {:spec transition-tree
+    (if-not (s/valid? txflow-graph (:service-map mock-service))
+      (throw (ex-info "Invalid txflow implementation" {:spec txflow-graph
                                                        :service-map body}))
       mock-service)))
 
