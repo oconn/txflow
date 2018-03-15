@@ -79,14 +79,15 @@
                :event :init
                :error nil}))
 
-(defn tx-handler
+(defn txflow-handler
   "Formats TX response to be consumed by service handlers"
   ([result]
-   (tx-handler result
-                {:throw-with
-                 (fn [error-map]
-                   (throw (ex-info "TX Handler Error"
-                                   (assoc error-map :type :tx-handler-error))))}))
+   (txflow-handler result
+                   {:throw-with
+                    (fn [error-map]
+                      (throw (ex-info
+                              "txflow handler error"
+                              (assoc error-map :type :txflow-handler-error))))}))
   ([result {:keys [throw-with] :as options}]
    (let [{:keys [error state]} result]
      (if error

@@ -5,7 +5,7 @@
                                  is-termination-state?
                                  next-state
                                  initialize-txflow
-                                 tx-handler]]))
+                                 txflow-handler]]))
 
 (def sample-txflow-graph
   {:start
@@ -93,20 +93,20 @@
                 (catch Exception e
                   (type e)))))))
 
-(deftest tx-handler-test
+(deftest txflow-handler-test
   (testing "Returns just the state property on successful transitions"
     (is (= 6
-           (tx-handler (initialize-txflow 2
-                                          sample-transition-functions
-                                          sample-txflow-graph)))))
+           (txflow-handler (initialize-txflow 2
+                                              sample-transition-functions
+                                              sample-txflow-graph)))))
   (testing "Throws and error when an error is applied to a transition"
     (is (= :tx-handler-error
-           (try (tx-handler (initialize-txflow
-                             2
-                             (assoc sample-transition-functions
-                                    :state-2
-                                    #(merge % {:error {}
-                                               :event :end-transition}))
-                             sample-txflow-graph))
+           (try (txflow-handler (initialize-txflow
+                                 2
+                                 (assoc sample-transition-functions
+                                        :state-2
+                                        #(merge % {:error {}
+                                                   :event :end-transition}))
+                                 sample-txflow-graph))
                 (catch Exception e
                   (-> e ex-data :type)))))))
